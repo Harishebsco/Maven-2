@@ -27,6 +27,9 @@ pipeline {
        }
    }
    post {
+       always {
+       junit 'target/surefire-reports/*.xml'
+       }
        success {
            echo "✅ Build, test, and packaging successful!"
        }
@@ -34,4 +37,3 @@ pipeline {
            echo "❌ Something went wrong."
        }
    }
-}
