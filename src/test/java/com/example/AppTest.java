@@ -1,9 +1,9 @@
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package com.example;
+import org.junit.Test;
+import static org.junit.Assert.*;
 public class AppTest {
    @Test
-   void testMessage() {
-       String message = "Hello World!";
-       assertEquals("Hello World!", message);
+   public void testGreet() {
+       assertEquals("Hello Test", App.greet());
    }
 }
