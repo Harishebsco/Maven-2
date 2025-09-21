@@ -1,7 +1,7 @@
 pipeline {
    agent any
    tools {
-       maven 'Maven3'   // name from Global Tool Configuration
+       maven 'Maven3'   // Use the Maven installation name in Jenkins Global Tools
    }
    stages {
        stage('Checkout') {
@@ -9,16 +9,24 @@ pipeline {
                git 'https://github.com/Harishebsco/Maven-2.git'
            }
        }
-       stage('Build with Maven') {
+       stage('Build') {
            steps {
                sh 'mvn clean package'
+           }
+       }
+       stage('Test Results') {
+           steps {
+               junit '**/target/surefire-reports/*.xml'
            }
        }
    }
    post {
        success {
            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-           echo "Build successful! JAR archived."
+           echo "✅ Build successful! JAR archived."
+       }
+       failure {
+           echo "❌ Build failed."
        }
    }
 }
