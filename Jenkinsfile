@@ -37,3 +37,4 @@ pipeline {
            echo "❌ Something went wrong."
        }
    }
+} 
