@@ -6,12 +6,8 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 <groupId>com.example</groupId>
 <artifactId>hello-maven</artifactId>
 <version>1.0-SNAPSHOT</version>
-<properties>
-<maven.compiler.source>17</maven.compiler.source>
-<maven.compiler.target>17</maven.compiler.target>
-</properties>
 <dependencies>
-<!-- JUnit 5 for testing -->
+<!-- JUnit 5 dependency -->
 <dependency>
 <groupId>org.junit.jupiter</groupId>
 <artifactId>junit-jupiter</artifactId>
@@ -21,11 +17,21 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
 </dependencies>
 <build>
 <plugins>
-<!-- Surefire to run tests -->
+<!-- Compiler plugin -->
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-compiler-plugin</artifactId>
+<version>3.8.1</version>
+<configuration>
+<source>17</source>
+<target>17</target>
+</configuration>
+</plugin>
+<!-- Surefire plugin for running tests -->
 <plugin>
 <groupId>org.apache.maven.plugins</groupId>
 <artifactId>maven-surefire-plugin</artifactId>
-<version>3.1.2</version>
+<version>3.0.0</version>
 </plugin>
 </plugins>
 </build>
