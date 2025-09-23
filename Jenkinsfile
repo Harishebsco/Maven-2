@@ -25,6 +25,20 @@ pipeline {
                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
            }
        }
+      stage('Test & Coverage') {
+            steps {
+                 sh 'mvn clean verify'
+           }
+        }
+      stage('Publish Coverage Report') {
+             steps {
+                jacoco execPattern: '**/target/jacoco.exec',
+          classPattern: '**/target/classes',
+          sourcePattern: '**/src/main/java',
+          inclusionPattern: '**/*.class',
+          exclusionPattern: '**/*Test*'
+ }
+}
    }
    post {
        always {
