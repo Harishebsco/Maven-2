@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+    tools {
+        maven 'Maven3'
+    }
+    environment {
+        // Use the SonarQube token stored in Jenkins credentials
+        SONARQUBE_ENV = credentials('sonar')  
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Harishebsco/Maven-2.git'
+            }
+        }
+        stage('Build & Test') {
+            steps {
+                sh 'mvn clean verify'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('Code Coverage (JaCoCo)') {
+            steps {
+                jacoco execPattern: '**/target/jacoco.exec',
+                       classPattern: '**/target/classes',
+                       sourcePattern: '**/src/main/java',
+                       inclusionPattern: '**/*.class',
+                       exclusionPattern: '**/*Test*'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('MySonarQube') {   // Name from Jenkins configuration
+                    sh """
+                       mvn sonar:sonar \
+                         -Dsonar.projectKey=Maven \
+                         -Dsonar.host.url=http://172.31.23.142:9000 \
+                         -Dsonar.login=$SONARQUBE_ENV
+                    """
+                }
+            }
+        }
+        stage('Archive JAR') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
+    }
+    post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+        }
+        success {
+            echo "✅ Build, test, coverage, SonarQube analysis, and packaging successful!"
+        }
+        failure {
+            echo "❌ Something went wrong."
+        }
+    }
+}
