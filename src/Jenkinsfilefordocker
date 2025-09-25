@@ -1,0 +1,10 @@
+pipeline {
+   agent {
+     docker { image'openjdk:17' }
+   }
+  stages ('ConatainerTest') {
+    steps {
+      sh 'java--version'
+    }
+  }
+} 
